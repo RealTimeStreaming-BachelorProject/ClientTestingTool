@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import SocketIOClient from 'socket.io-client'
 const ENDPOINT = "http://localhost:5001"
 
-export const useDriverData = () => {
+export const useDriverData = (): [number, number] => {
     const [socket, setSocket] = useState<SocketIOClient.Socket | null>(null)
     const [position, setPosition] = useState("");
     useEffect(() => {
@@ -16,5 +16,6 @@ export const useDriverData = () => {
         })
     },[socket])
     
-    return position
+    return [55.37651, 10.43341]
+    // return position
 }
