@@ -11,6 +11,10 @@ export const useDriverData = (driverId: string): [number, number] | undefined =>
     })
     useEffect(() => {
         if (!socket) return;
+        socket.emit("subscribe-to-driver", driverId);
+    },[driverId])
+    useEffect(() => {
+        if (!socket) return;
         if (!driverId) return;
         socket.on("last-position", (lastPosition: [number, number]) => {
             setPosition(lastPosition)
