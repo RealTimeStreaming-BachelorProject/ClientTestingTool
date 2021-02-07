@@ -12,7 +12,11 @@ export const useDriverData = (
   useEffect(() => {
     if (socket) return;
     setSocket(SocketIOClient(ENDPOINT));
-  });
+    return () => {
+        if (!socket) return;
+        (socket as SocketIOClient.Socket).disconnect();
+    }
+  },[]);
 
   useEffect(() => {
     if (!socket) return;
