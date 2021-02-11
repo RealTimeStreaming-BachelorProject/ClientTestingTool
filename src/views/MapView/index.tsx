@@ -32,7 +32,7 @@ export default function MapView() {
       )}
       {!position && <div>No position yet</div>}
       {position && (
-        <MapContainer center={position} zoom={18} style={{ height: "100vh" }}>
+        <MapContainer center={position} zoom={18} style={{ height: "calc(100vh - 80px)" }}>
           <ChangeView center={position} zoom={18} />
           <TileLayer
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'

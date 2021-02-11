@@ -3,7 +3,7 @@ import MapView from './views/MapView'
 
 function App() {
   return (
-    <div className="App">
+    <div className="App" style={{padding: "40px"}}>
       <MapView />
     </div>
   );
