@@ -5,8 +5,9 @@ const ENDPOINT_LOADBALANCER = "http://localhost:5002/clients";
 
 export const useDriverData = (
   driverId: string
-): [number, number] | undefined => {
+): {position: [number, number] | undefined, error: string} => {
   const [socket, setSocket] = useState<SocketIOClient.Socket | null>(null);
+  const [error, setError] = useState("");
   const [position, setPosition] = useState<[number, number] | undefined>(
     undefined
   );
@@ -32,7 +33,10 @@ export const useDriverData = (
       console.log(lastPosition);
       setPosition(lastPosition);
     });
+    socket.on("connect_error", (error: any) => {
+      setError(error.message)
+    })
   }, [socket]);
 
-  return position;
+  return {position, error};
 };

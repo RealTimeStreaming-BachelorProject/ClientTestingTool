@@ -7,7 +7,11 @@ import "./customMarker/marker.css";
 export default function MapView() {
   const [driverId, setDriverId] = useState("");
   const [tempDriverId, setTempDriverId] = useState("6905a686-cde9-4eb7-9e8d-db7f84ccec84");
-  const position = useDriverPosition(driverId);
+  const {position, error} = useDriverPosition(driverId);
+  if (error) return <div>
+    <h1>Connection error</h1>
+    <p>{error}</p>
+  </div>
   return (
     <div>
       {!driverId && (
