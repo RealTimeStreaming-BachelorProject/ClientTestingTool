@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import {SocketContext} from '../App'
+import { LATEST_COORDINATES, SUBSCRIBE_TO_DRIVER } from "../socketevents";
 
 export const useDriverData = (
-  driverId: string
+  packageID: string
 ): { position: [number, number] | undefined; error: string } => {
   const [error, setError] = useState("");
   const [position, setPosition] = useState<[number, number] | undefined>(
@@ -13,12 +14,12 @@ export const useDriverData = (
 
   useEffect(() => {
     if (!socket) return;
-    socket.emit("subscribe-to-driver-coordinates", driverId);
-  }, [driverId]);
+    socket.emit(SUBSCRIBE_TO_DRIVER, packageID);
+  }, [packageID]);
 
   useEffect(() => {
     if (!socket) return;
-    socket.on("latest-coordinates", (lastPosition: [number, number]) => {
+    socket.on(LATEST_COORDINATES, (lastPosition: [number, number]) => {
       console.log(lastPosition);
       setPosition(lastPosition);
     });

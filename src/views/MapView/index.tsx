@@ -5,27 +5,27 @@ import { iconPerson } from "./customMarker/marker";
 import "./customMarker/marker.css";
 
 export default function MapView() {
-  const [driverId, setDriverId] = useState("");
-  const [tempDriverId, setTempDriverId] = useState("6905a686-cde9-4eb7-9e8d-db7f84ccec84");
-  const {position, error} = useDriverPosition(driverId);
+  const [packageId, setPackageId] = useState("");
+  const [tempPackageId, setTempPackageId] = useState("00310ae8-40fd-4aab-bcd6-c18402d229d1");
+  const {position, error} = useDriverPosition(packageId);
   if (error) return <div>
     <h1>Connection error</h1>
     <p>{error}</p>
   </div>
   return (
     <div>
-      {!driverId && (
+      {!packageId && (
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            setDriverId(tempDriverId);
+            setPackageId(tempPackageId);
           }}
         >
-          <label htmlFor="">driverId</label>
+          <label htmlFor="">packageID</label>
           <input
             type="text"
-            onChange={(e) => setTempDriverId(e.target.value)}
-            value={tempDriverId}
+            onChange={(e) => setTempPackageId(e.target.value)}
+            value={tempPackageId}
           />
           <button>Set</button>
         </form>
