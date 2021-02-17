@@ -6,8 +6,8 @@ config:
     transports: ["websocket"]
   processor: "./artilleryiofunctions.js"
   phases: # 5 users every second for 3 seconds
-    - duration: 15
-      arrivalRate: 50
+    - duration: 3
+      arrivalRate: 5
       name: warmup
 
 scenarios:
