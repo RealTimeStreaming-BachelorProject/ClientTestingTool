@@ -1,0 +1,15 @@
+{
+  "name": "loadtest",
+  "version": "1.0.0",
+  "description": "",
+  "main": "artilleryiofunctions.js",
+  "scripts": {
+    "test": "$(npm bin)/artillery run artilleryio.drivertest.yml"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "artillery": "^1.6.1",
+    "uuid": "^8.3.2"
+  }
+}
