@@ -1,25 +1,37 @@
 config:
-  target: "ws://localhost:5002/drivers"
+  target: "http://localhost:5002"
   socketio:
-    query:
-      token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRyaXZlcnhveG8yIiwiZHJpdmVySUQiOiIzNGQ0YTE2Yy02ODM0LTQxMDUtOTRkZC1kY2Q5NDk0ZDU5MzkiLCJleHAiOjE2MTYwNjM1NTksImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjUwMDUiLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo1MDA1In0.48QozXuQZi69ptXhlsDh54sgy4QmH_b-wwDDx-g_TLo"
     transports: ["websocket"]
   processor: "./artilleryiofunctions.js"
   phases: # 5 users every second for 3 seconds
     - duration: 3
-      arrivalRate: 5
-      name: warmup
+      arrivalRate: 1
 
 scenarios:
   - name: My Socketio test
     engine: "socketio"
     flow:
+      - function: "login"
+      - emit:
+          namespace: "/drivers"
+          channel: "authenticate"
+          data:
+            token: "{{ token }}"
+
       - function: "setupData"
       - emit:
+          namespace: "/drivers"
           channel: "delivery_start"
-          data: "{{ packages }}"
+          data: 
+            packages: "{{ packages }}"
       - loop:
+        - function: "getCoordinate"
         - emit:
-            channel: "echo"
-            data: "Hello world!"
+            namespace: "/drivers"
+            channel: "new_coordinates"
+            data:
+              coordinate: "{{ coordinate }}"
+        - think: 3
         count: 100
+
+
