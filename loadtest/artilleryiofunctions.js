@@ -1,6 +1,5 @@
 const { v4: uuidv4 } = require("uuid");
 const fetch = require("node-fetch");
-var faker = require("faker");
 
 const LOGINSERVICE_URL =
   process.env["LOGINSERVICE_URL"] ?? "http://192.168.50.65:5005";
