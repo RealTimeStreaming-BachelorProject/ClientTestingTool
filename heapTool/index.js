@@ -12,13 +12,16 @@ const before = {
     old_space: helpers.getSpaceDetails(["old_space"])[0],
     new_space: helpers.getSpaceDetails(["new_space"])[0]
 }
-/* ACTUAL TEST */
+
+/* ACTUAL TEST START */
 for (var i = 0; i < loopSize; i++) {
   data.push({
     id: i,
     time: new Date(),
   });
 }
+/* ACTUAL TEST END */
+
 const after = {
     old_space: helpers.getSpaceDetails(["old_space"])[0],
     new_space: helpers.getSpaceDetails(["new_space"])[0]
