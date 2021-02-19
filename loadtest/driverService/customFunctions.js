@@ -2,7 +2,7 @@ const { v4: uuidv4 } = require("uuid");
 const fetch = require("node-fetch");
 
 const LOGINSERVICE_URL =
-  process.env["LOGINSERVICE_URL"] ?? "http://192.168.50.65:5005";
+  process.env["LOGINSERVICE_URL"] ?? "http://localhost:5005";
 const LOGINSERVICE_LOGIN_ROUTE = LOGINSERVICE_URL + "/authentication/login";
 const LOGINSERVICE_REGISTER_ROUTE =
   LOGINSERVICE_URL + "/authentication/register";
@@ -37,23 +37,14 @@ async function login(userContext, events, done) {
 
     if (response.statusCode !== 200) {
       // Try to register
-      const registerResponse = await fetch(LOGINSERVICE_REGISTER_ROUTE, {
+      response = await fetch(LOGINSERVICE_REGISTER_ROUTE, {
         method: "post",
         body: JSON.stringify(body),
         headers: { "Content-Type": "application/json" },
       }).then((res) => res.json());
 
-      if (registerResponse.statusCode !== 201) {
+      if (response.statusCode !== 201) {
         throw new Error("ERROR - Could not create a new user");
-      }
-      response = await fetch(LOGINSERVICE_LOGIN_ROUTE, {
-        method: "post",
-        body: JSON.stringify(body),
-        headers: { "Content-Type": "application/json" },
-      }).then((res) => res.json());
-
-      if (response.statusCode !== 200) {
-        throw new Error("ERROR - Could still not login after user registering");
       }
     }
 
@@ -64,7 +55,7 @@ async function login(userContext, events, done) {
   }
 }
 
-const routes = require("./routes.json");
+const routes = require("../routes.json");
 
 /*
   Used to create an array of packages which the driver will simulate 

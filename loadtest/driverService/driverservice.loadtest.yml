@@ -2,7 +2,7 @@ config:
   target: "http://localhost:5002"
   socketio:
     transports: ["websocket"]
-  processor: "./artilleryiofunctions.js"
+  processor: "./customFunctions.js"
   phases: # 50 users every second for 30 seconds
     - duration: 30
       arrivalRate: 500
