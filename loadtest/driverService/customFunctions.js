@@ -25,6 +25,8 @@ function makeid(length) {
 /*
   Used to login as a driver and get a JWT for authorization
   If the driver does not have a user yet they are registered
+  TODO: Right now we also hit the loginservice. This is probabily not ideal as we want to target the DriverService in this test.
+  Therefore we should probably just create a random driverID and a valid JWT instead of hitting LoginService
 */
 async function login(userContext, events, done) {
   const body = { username: makeid(16), password: "RandomPassword1." };
