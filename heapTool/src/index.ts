@@ -1,13 +1,13 @@
-const chalk = require("chalk");
+import chalk from 'chalk'
 const v8 = require("v8");
 const data = [];
-const loopSize = process.argv[2];
-const helpers = require("./helpers")
+const loopSize = Number(process.argv[2]) || 10;
+import * as helpers from './helpers'
 const heapSize = helpers.bytesToMB(v8.getHeapStatistics().heap_size_limit);
 console.log(`⭐️ Running heap testing tool with ${heapSize}MB assigned\n`);
 console.log(`Initating test with ${loopSize} loops\n`);
 
-v8.writeHeapSnapshot("snapshots/before.heapsnapshot");
+v8.writeHeapSnapshot("../snapshots/before.heapsnapshot");
 const before = {
     old_space: helpers.getSpaceDetails(["old_space"])[0],
     new_space: helpers.getSpaceDetails(["new_space"])[0]
@@ -35,5 +35,5 @@ console.log(chalk.green(`Old Space stats (in MB):`))
 helpers.printSpaceComparison(before.old_space, after.old_space)
 
 
-v8.writeHeapSnapshot("snapshots/after.heapsnapshot")
+v8.writeHeapSnapshot("../snapshots/after.heapsnapshot")
 helpers.printAvailableHeap()
