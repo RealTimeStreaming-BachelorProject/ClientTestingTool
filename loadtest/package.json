@@ -4,7 +4,7 @@
   "description": "",
   "main": "artilleryiofunctions.js",
   "scripts": {
-    "test": "$(npm bin)/artillery run artilleryio.drivertest.yml"
+    "test": "$(npm bin)/artillery run ./driverService/driverservice.loadtest.yml"
   },
   "author": "",
   "license": "ISC",
