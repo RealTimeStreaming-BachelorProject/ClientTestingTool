@@ -4,12 +4,15 @@
   "description": "",
   "main": "artilleryiofunctions.js",
   "scripts": {
-    "test": "$(npm bin)/artillery run ./driverService/driverservice.loadtest.yml"
+    "test": "$(npm bin)/artillery run",
+    "start": "node index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "artillery": "^1.6.1",
+    "glob": "^7.1.6",
+    "inquirer": "^7.3.3",
     "node-fetch": "^2.6.1",
     "uuid": "^8.3.2"
   }
