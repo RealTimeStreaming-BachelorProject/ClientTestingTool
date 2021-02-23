@@ -57,7 +57,7 @@ async function login(userContext, events, done) {
   }
 }
 
-const routes = require("../routes.json");
+const routes = require("./routes.json");
 
 /*
   Used to create an array of packages which the driver will simulate 
