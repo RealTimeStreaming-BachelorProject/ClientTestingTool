@@ -2,7 +2,6 @@ const glob = require("glob");
 const path = require("path");
 const inquirer = require("inquirer");
 const { execSync } = require("child_process");
-const { NOTIMP } = require("dns");
 
 glob(path.resolve(__dirname, "tests/**/*.loadtest.yml"), (err, files) => {
   inquirer
@@ -19,6 +18,21 @@ glob(path.resolve(__dirname, "tests/**/*.loadtest.yml"), (err, files) => {
     ])
     .then((answer) => {
       const { testToRun } = answer;
-      execSync("npm run test  -- " + testToRun, {stdio:[0,1,2]});
+      let manualTarget;
+      const arguments = process.argv.slice(2);
+      if (arguments[0]) {
+        manualTarget = arguments[0]
+      }
+      runTest(testToRun, manualTarget);
     });
 });
+
+const runTest = (testToRun, manualTarget) => {
+  if (manualTarget) {
+    execSync("npm run test  -- " + testToRun + " --target " + manualTarget, {
+      stdio: [0, 1, 2],
+    });
+  } else {
+    execSync("npm run test  -- " + testToRun, { stdio: [0, 1, 2] });
+  }
+};
