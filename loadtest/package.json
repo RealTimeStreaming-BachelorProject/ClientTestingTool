@@ -4,7 +4,7 @@
   "description": "",
   "main": "artilleryiofunctions.js",
   "scripts": {
-    "test": "$(npm bin)/artillery run",
+    "test": "artillery run",
     "start": "node index.js"
   },
   "author": "",
