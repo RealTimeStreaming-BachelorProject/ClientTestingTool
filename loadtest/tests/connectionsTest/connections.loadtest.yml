@@ -1,0 +1,17 @@
+config:
+  target: "http://localhost:5002"
+  socketio:
+    transports: ["websocket"]
+  processor: "./customFunctions.js"
+  phases:
+    - duration: 10
+      arrivalRate: 1000
+
+scenarios:
+  - name: Client Scenario
+    engine: "socketio"
+    flow:
+      - emit:
+          namespace: "/clients"
+          channel: "ping"
+      - think: 300 # do nothing for 5 and disconnect (approximately the same amount of time it takes the driver to drive his route)
