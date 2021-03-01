@@ -1,14 +1,13 @@
 const { v4: uuidv4 } = require("uuid");
-const fetch = require("node-fetch");
+const jwt = require("jsonwebtoken");
 
-const LOGINSERVICE_URL =
-  process.env["LOGINSERVICE_URL"] ?? "http://localhost:5005";
-const LOGINSERVICE_LOGIN_ROUTE = LOGINSERVICE_URL + "/authentication/login";
-const LOGINSERVICE_REGISTER_ROUTE =
-  LOGINSERVICE_URL + "/authentication/register";
 const routename = process.env.ROUTENAME ?? "route1";
 
-module.exports = { setupData, login, getCoordinate, getPackageID };
+module.exports = {
+  emulateLogin,
+  emulateCoordinate,
+  getDriverID,
+};
 
 /*
   Used to make a random string with a given length with only characters. No numbers
@@ -22,62 +21,23 @@ function makeid(length) {
   }
   return result;
 }
+
+const JWT_KEY = "developmentjwtkey";
 /*
-  Used to login as a driver and get a JWT for authorization
-  If the driver does not have a user yet they are registered
-  TODO: Right now we also hit the loginservice. This is probabily not ideal as we want to target the DriverService in this test.
-  Therefore we should probably just create a random driverID and a valid JWT instead of hitting LoginService
+  Simulates a driver logging in. Creating a fake username and a fake driverID and creating a token with the same key
+  that driverservice expects
 */
-async function login(userContext, events, done) {
-  const body = { username: makeid(16), password: "RandomPassword1." };
-  try {
-    let response = await fetch(LOGINSERVICE_LOGIN_ROUTE, {
-      method: "post",
-      body: JSON.stringify(body),
-      headers: { "Content-Type": "application/json" },
-    }).then((res) => res.json());
+function emulateLogin(userContext, events, done) {
+  const username = makeid(16);
+  const driverID = uuidv4();
+  const token = jwt.sign({ username, driverID }, JWT_KEY);
 
-    if (response.statusCode !== 200) {
-      // Try to register
-      response = await fetch(LOGINSERVICE_REGISTER_ROUTE, {
-        method: "post",
-        body: JSON.stringify(body),
-        headers: { "Content-Type": "application/json" },
-      }).then((res) => res.json());
-
-      if (response.statusCode !== 201) {
-        throw new Error("ERROR - Could not create a new user");
-      }
-    }
-
-    userContext.vars.token = response.token;
-    done();
-  } catch (error) {
-    console.log(error);
-  }
+  userContext.vars.token = token;
+  subscripableDrivers.push(driverID);
+  done();
 }
 
 const routes = require("./routes.json");
-
-/*
-  Used to create an array of packages which the driver will simulate 
-  delivering during the route
-*/
-function setupData(userContext, events, done) {
-  // packages
-  const packages = [];
-  // Create package uuids which in the real world would be generated somewhere else
-  for (var i = 0; i < 100; i++) {
-    packages.push(uuidv4());
-  }
-
-  userContext.vars.packages = packages;
-
-  // User can subscribe to one package for each driver. No more is needed for a realistic test scenario
-  subscripablePackages.push(packages[0]);
-
-  return done();
-}
 
 const routeCoordinates = routes[routename]["coordinates"];
 let routeCounter = 0;
@@ -86,7 +46,7 @@ let routeCounter = 0;
   Used to get the next coordinate in the drivers route
   If the driver is done with the route, the route just starts over
 */
-function getCoordinate(userContext, events, done) {
+function emulateCoordinate(userContext, events, done) {
   if (routeCounter >= routeCoordinates.length) {
     routeCounter = 0; // reset back to start of route
   }
@@ -97,33 +57,31 @@ function getCoordinate(userContext, events, done) {
   return done();
 }
 
-// Will fill up with package ids (uuid), one package for each driver registered
-const subscripablePackages = [];
+// Will fill up with connected driver ids (uuid)
+const subscripableDrivers = [];
 
 /*
   Used to subscribe to a drivers location for a realistic user scenario
 */
-async function getPackageID(userContext, events, done) {
+async function getDriverID(userContext, events, done) {
   try {
-    let packageID;
+    let driverID;
     while (true) {
       // a random package chosen from subscripablePackages which the client will use to subscribe to a driver
       // A random number from 0 to and including length - 1
       const randomIndex = Math.floor(
-        Math.random() * Math.floor(subscripablePackages.length)
+        Math.random() * Math.floor(subscripableDrivers.length)
       );
-      packageID = subscripablePackages[randomIndex];
-      if (!packageID) {
+      driverID = subscripableDrivers[randomIndex];
+      if (!driverID) {
         // Sleep 1 second
         await new Promise((resolve) => setTimeout(resolve, 1000));
       } else {
-        userContext.vars.packageID = packageID;
+        userContext.vars.driverID = driverID;
         return done();
       }
     }
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 }
-
-// getPackageID(null, null, null)

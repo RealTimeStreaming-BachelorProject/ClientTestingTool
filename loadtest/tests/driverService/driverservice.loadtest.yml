@@ -12,31 +12,25 @@ scenarios:
     weight: 1 # 1 / 5 = 20% chance
     engine: "socketio"
     flow:
-      - function: "getPackageID"
+      - function: "getDriverID"
       - emit:
           namespace: "/clients"
           channel: "subscribe_to_driver_coordinates"
-          data: "{{ packageID }}"
+          data: "{{ driverID }}"
       - think: 300 # do nothing for 5 and disconnect (approximately the same amount of time it takes the driver to drive his route)
 
   - name: Driver Scenario
     weight: 4 # 4 / 5 = 80% chance
     engine: "socketio"
     flow:
-      - function: "login"
+      - function: "emulateLogin"
       - emit:
           namespace: "/drivers"
           channel: "authenticate"
           data:
             token: "{{ token }}"
-      - function: "setupData"
-      - emit:
-          namespace: "/drivers"
-          channel: "delivery_start"
-          data:
-            packages: "{{ packages }}"
       - loop:
-        - function: "getCoordinate"
+        - function: "emulateCoordinate"
         - emit:
             namespace: "/drivers"
             channel: "new_coordinates"
