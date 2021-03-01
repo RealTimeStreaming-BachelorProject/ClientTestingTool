@@ -5,35 +5,58 @@ import { iconPerson } from "./customMarker/marker";
 import "./customMarker/marker.css";
 
 export default function MapView() {
+  const [driverId, setDriverId] = useState("");
   const [packageId, setPackageId] = useState("");
-  const [tempPackageId, setTempPackageId] = useState("00310ae8-40fd-4aab-bcd6-c18402d229d1");
-  const {position, error} = useDriverPosition(packageId);
-  
-  if (error) return <div>
-    <h1>Connection error</h1>
-    <p>{error}</p>
-  </div>
+  const { position, error } = useDriverPosition(driverId);
+
+  async function onPackageTracing(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    console.log(packageId);
+    const PACKAGE_SERVICE_URL = `http://localhost:9001/packages?packageID=${packageId}`;
+    const response = await fetch(PACKAGE_SERVICE_URL).then((response) =>
+      response.json()
+    );
+
+    if (response.status !== 200) {
+      // TODO: Handle
+      console.error("Package not found");
+      return;
+    }
+    console.log(response);
+    // TODO: Display all the data
+    if (response.driverID) {
+      // Starting driver tracking
+      setDriverId(response.driverID);
+    }
+  }
+
+  if (error)
+    return (
+      <div>
+        <h1>Connection error</h1>
+        <p>{error}</p>
+      </div>
+    );
   return (
     <div>
-      {!packageId && (
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            setPackageId(tempPackageId);
-          }}
-        >
+      {!driverId && (
+        <form onSubmit={onPackageTracing}>
           <label htmlFor="">packageID</label>
           <input
             type="text"
-            onChange={(e) => setTempPackageId(e.target.value)}
-            value={tempPackageId}
+            onChange={(e) => setPackageId(e.target.value)}
+            value={packageId}
           />
           <button>Set</button>
         </form>
       )}
       {!position && <div>No position yet</div>}
       {position && (
-        <MapContainer center={position} zoom={18} style={{ height: "calc(100vh - 80px)" }}>
+        <MapContainer
+          center={position}
+          zoom={18}
+          style={{ height: "calc(70vh)" }}
+        >
           <ChangeView center={position} zoom={18} />
           <TileLayer
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'

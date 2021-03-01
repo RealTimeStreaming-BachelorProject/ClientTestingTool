@@ -1,0 +1,24 @@
+# Here you can start all the services for the whole flow
+version: "3"
+
+services:
+  # TODO: notification service
+  # TODO: packageservice cassandras
+  # TODO: packageservice itself
+  # TODO: web store demo
+  # TODO: driverservice redis cluster
+  # TODO: driverservice metrics
+  # TODO: driverservice itself
+  # TODO: loginservice database
+  # TODO: loginservice itself
+  # TODO: usertool
+  
+  userTool:
+    build:
+      context: ./
+      dockerfile: dockerfile
+    container_name: userTool
+    # TODO:
+
+  # drivers are then spun up using artillery tests
+  

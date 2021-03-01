@@ -3,7 +3,7 @@ import {SocketContext} from '../App'
 import { LATEST_COORDINATES, SUBSCRIBE_TO_DRIVER } from "../socketevents";
 
 export const useDriverData = (
-  packageID: string
+  driverID: string
 ): { position: [number, number] | undefined; error: string } => {
   const [error, setError] = useState("");
   const [position, setPosition] = useState<[number, number] | undefined>(
@@ -14,8 +14,8 @@ export const useDriverData = (
 
   useEffect(() => {
     if (!socket) return;
-    socket.emit(SUBSCRIBE_TO_DRIVER, packageID);
-  }, [packageID]);
+    socket.emit(SUBSCRIBE_TO_DRIVER, driverID);
+  }, [driverID]);
 
   useEffect(() => {
     if (!socket) return;
