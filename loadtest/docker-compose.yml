@@ -1,7 +1,6 @@
 version: '3'
 
 services:
-  loadtest:
+  connectionsTest:
     build: .
-    stdin_open: true
-    tty: true
+    command: ./tests/connectionsTest/connections.loadtest.yml
