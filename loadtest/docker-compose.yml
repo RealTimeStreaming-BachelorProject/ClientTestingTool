@@ -1,9 +1,9 @@
 version: '3'
 
 services:
-  connectionsTest:
+  connections_test:
     build: .
     command: ./tests/connectionsTest/connections.loadtest.yml
-  driverService:
+  driver_service:
     build: .
     command: ./tests/driverService/driverService.loadtest.yml
