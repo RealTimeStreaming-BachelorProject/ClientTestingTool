@@ -4,3 +4,6 @@ services:
   connectionsTest:
     build: .
     command: ./tests/connectionsTest/connections.loadtest.yml
+  driverService:
+    build: .
+    command: ./tests/driverService/driverService.loadtest.yml
