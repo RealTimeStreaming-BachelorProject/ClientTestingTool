@@ -1,0 +1,57 @@
+config:
+  target: "http://localhost:9001"
+  processor: "./customFunctions.js"
+  tls:
+    rejectUnauthorized: false
+  http:
+    # Responses have to be sent within 10 seconds or the request will be aborted
+    timeout: 10
+  phases:
+    - duration: 30
+      arrivalRate: 500
+
+scenarios:
+  - name: Register Package
+    weight: 2
+    flow:
+      - post:
+          url: "/packages"
+          json:
+            receiverAddress: "Random Adresse Odense S 5260"
+            receiverName: "Oliver Marco van Komen"
+            receiverEmail: "randomEmail@gmail.com"
+            senderAddress: "Bergvägen 1, SE-341 42 LJUNGBY, SWEDEN"
+            senderName: "Komplett.dk"
+            weightKg: 12
+            fakeScenario: true
+          afterResponse: "savePackageID"
+  # - name: Transport Company Delivery
+  #   weight: 2
+  #   flow:
+  #     - function: "getPackageID"
+  #     - post:
+  #         url: "/packages/central"
+  #         json:
+  #           packageIDs: "{{ packageID }}"
+  #           fakeScenario: true
+  # - name: DriverDelivery Start
+  #   weight: 2
+  #   flow:
+  #     - function: "emulateDriverID"
+  #     - post:
+  #         url: "/packages/inroute"
+  #         json:
+  #           packageIDs: "{{ packageID }}"
+  #           driverID: "{{ driverID }}"
+  #           fakeScenario: true
+  - name: Get packageDetails
+    weight: 1
+    flow:
+      - function: "getPackageID"
+      - get:
+          url: "/packages?packageID={{packageID}}"
+
+  
+
+
+
