@@ -1,9 +1,12 @@
 version: '3'
 
 services:
-  connections_test:
+  # connections_test:
+  #   build: .
+  #   # command: "./tests/driverService/driverservice.loadtest.yml" "--target http://10.123.252.250:5002"
+  # driver_service:
+  #   build:
+  #     context: .
+  #   # command: ["./tests/driverService/driverservice.loadtest.yml", "--target http://10.123.252.250:5002"]
+  test_runner:
     build: .
-    command: "./tests/driverService/driverservice.loadtest.yml" "--target http://10.123.252.250:5002"
-  driver_service:
-    build: .
-    command: "./tests/driverService/driverservice.loadtest.yml" "--target http://10.123.252.250:5002"
