@@ -6,4 +6,4 @@ services:
     command: ./tests/connectionsTest/connections.loadtest.yml
   driver_service:
     build: .
-    command: ./tests/driverService/driverService.loadtest.yml
+    command: ./tests/driverService/driverservice.loadtest.yml
