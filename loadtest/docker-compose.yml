@@ -1,0 +1,6 @@
+version: '3'
+
+services:
+  connectionsTest:
+    build: .
+    command: ./tests/connectionsTest/connections.loadtest.yml
