@@ -21,7 +21,7 @@ async function getPackageID(userContext, events, done) {
       // Sleep 1 second
       await new Promise((resolve) => setTimeout(resolve, 1000));
     } else {
-      userContext.vars.packageID = [packageID];
+      userContext.vars.packageID = packageID;
       return done();
     }
   }

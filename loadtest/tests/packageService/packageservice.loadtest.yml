@@ -25,33 +25,31 @@ scenarios:
             weightKg: 12
             fakeScenario: true
           afterResponse: "savePackageID"
-  # - name: Transport Company Delivery
-  #   weight: 2
-  #   flow:
-  #     - function: "getPackageID"
-  #     - post:
-  #         url: "/packages/central"
-  #         json:
-  #           packageIDs: "{{ packageID }}"
-  #           fakeScenario: true
-  # - name: DriverDelivery Start
-  #   weight: 2
-  #   flow:
-  #     - function: "emulateDriverID"
-  #     - post:
-  #         url: "/packages/inroute"
-  #         json:
-  #           packageIDs: "{{ packageID }}"
-  #           driverID: "{{ driverID }}"
-  #           fakeScenario: true
+  - name: Transport Company Delivery
+    weight: 2
+    flow:
+      - function: "getPackageID"
+      - post:
+          url: "/packages/central"
+          json:
+            packageIDs: [
+              "{{ packageID }}"
+            ]
+            fakeScenario: true
+  - name: DriverDelivery Start
+    weight: 2
+    flow:
+      - function: "emulateDriverID"
+      - function: "getPackageID"
+      - post:
+          url: "/packages/inroute"
+          json:
+            packageIDs: ["{{ packageID }}"]
+            driverID: "{{ driverID }}"
+            fakeScenario: true
   - name: Get packageDetails
     weight: 1
     flow:
       - function: "getPackageID"
       - get:
-          url: "/packages?packageID={{packageID}}"
-
-  
-
-
-
+          url: "/packages?packageID={{ packageID }}"
