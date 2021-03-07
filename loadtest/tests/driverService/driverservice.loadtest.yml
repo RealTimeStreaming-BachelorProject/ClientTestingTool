@@ -4,7 +4,7 @@ config:
     transports: ["websocket"]
   processor: "./customFunctions.js"
   phases: # 50 users every second for 30 seconds
-    - duration: 5
+    - duration: 30
       arrivalRate: 500
 
 scenarios:
