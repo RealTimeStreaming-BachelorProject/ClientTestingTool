@@ -5,7 +5,9 @@
   "main": "artilleryiofunctions.js",
   "scripts": {
     "test": "artillery run",
-    "start": "node index.js"
+    "start": "node index.js",
+    "run-test": "artillery run $npm_config_testfile --target $npm_config_target --output report.json",
+    "report": "artillery run --output report.html report.json"
   },
   "author": "",
   "license": "ISC",
