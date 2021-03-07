@@ -7,7 +7,7 @@
     "test": "artillery run",
     "start": "node index.js",
     "testcase_1": "artillery run ./tests/driverService/driverservice.loadtest.yml --target http://10.123.252.250:5002 --output report.json",
-    "report": "artillery report --output report.html report.json"
+    "report": "artillery report --output /opt/reports/report.html report.json"
   },
   "author": "",
   "license": "ISC",
