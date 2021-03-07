@@ -6,8 +6,8 @@
   "scripts": {
     "test": "artillery run",
     "start": "node index.js",
-    "testcase_1": "artillery run ./tests/driverService/driverservice.loadtest.yml --target http://10.123.252.250:5002 --output report.json",
-    "report": "artillery report --output /opt/reports/report.html report.json"
+    "testcase_1": "artillery run ./tests/driverService/driverservice.loadtest.yml --target http://10.123.252.250:5002 --output /opt/reports/report.json && npm run report",
+    "report": "artillery report --output /opt/reports/report.html /opt/reports/report.json"
   },
   "author": "",
   "license": "ISC",
