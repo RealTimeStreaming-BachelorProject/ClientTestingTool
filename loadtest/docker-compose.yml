@@ -11,4 +11,4 @@ services:
   test_runner:
     build: .
     volumes: 
-      - ./reports:/app/reports
+      - /opt/reports:/opt/reports
