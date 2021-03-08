@@ -60,13 +60,13 @@ const containers = [];
 (async () => {
   const dockerContainers = await docker.container.list();
   if (dockerContainers.length === 0) {
-      console.log("No running containers")
-      process.exit(0)
+    console.log("No running containers");
+    process.exit(0);
   }
   for (const container of dockerContainers) {
     containers.push(new ContainerStat(container));
   }
-  console.log("Collecting data until stopped ...")
+  console.log("Collecting data until stopped ...");
   while (true) {
     for (const container of containers) {
       container.collectStats();
@@ -106,7 +106,9 @@ process.on("SIGINT", async (code) => {
           }'  : ${Math.round(memAverage)}%`
         );
       }
-      // Stopping & removing containers
+
+      // Stopping & removing container
+
       await container.dockercontainer
         .delete({ force: true })
         .then(() => {
@@ -115,12 +117,12 @@ process.on("SIGINT", async (code) => {
         .catch((err) =>
           console.log(`Could not delete container ${container.name}`)
         );
-      // Pruning volumes
-      await docker.volume.prune({ force: true }).then(() => {
-        console.log("Cleaned up volumes");
-      });
     }
   }
-
+  
+  // Pruning volumes
+  await docker.volume.prune({ force: true }).then(() => {
+    console.log("Cleaned up volumes");
+  });
   process.exit(code);
 });
