@@ -66,6 +66,7 @@ const containers = [];
   for (const container of dockerContainers) {
     containers.push(new ContainerStat(container));
   }
+  console.log("Collecting data until stopped ...")
   while (true) {
     for (const container of containers) {
       container.collectStats();
