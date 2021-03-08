@@ -59,6 +59,10 @@ const containers = [];
 
 (async () => {
   const dockerContainers = await docker.container.list();
+  if (dockerContainers.length === 0) {
+      console.log("No running containers")
+      process.exit(0)
+  }
   for (const container of dockerContainers) {
     containers.push(new ContainerStat(container));
   }
