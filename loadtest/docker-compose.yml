@@ -10,3 +10,5 @@ services:
   #   # command: ["./tests/driverService/driverservice.loadtest.yml", "--target http://10.123.252.250:5002"]
   test_runner:
     build: .
+    volumes: 
+      - /opt/reports:/opt/reports

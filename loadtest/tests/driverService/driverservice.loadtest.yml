@@ -17,7 +17,7 @@ scenarios:
           namespace: "/clients"
           channel: "subscribe_to_driver_coordinates"
           data: "{{ driverID }}"
-      - think: 300 # do nothing for 5 and disconnect (approximately the same amount of time it takes the driver to drive his route)
+      - think: 60 # do nothing for 1 minute and disconnect (approximately the same amount of time it takes the driver to drive his route)
 
   - name: Driver Scenario
     weight: 4 # 4 / 5 = 80% chance
@@ -37,4 +37,4 @@ scenarios:
             data:
               coordinate: "{{ coordinate }}"
         - think: 3
-        count: 100
+        count: 60
