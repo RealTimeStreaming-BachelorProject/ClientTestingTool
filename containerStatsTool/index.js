@@ -104,12 +104,16 @@ process.on("SIGINT", async (code) => {
       // Stopping & removing containers
       await container.dockercontainer
         .delete({ force: true })
+        .then(() => {
+          console.log("Cleaned up containers");
+        })
         .catch((err) =>
           console.log(`Could not delete container ${container.name}`)
         );
       // Pruning volumes
-      await docker.volume.prune({force: true});
-      
+      await docker.volume.prune({ force: true }).then(() => {
+        console.log("Cleaned up volumes");
+      });
     }
   }
 
