@@ -14,26 +14,29 @@ class ContainerStat {
   }
 
   collectStats() {
-    this.dockercontainer.stats({ stream: false }).then((stats) => {
-      stats.on("data", (stat) => {
-        const stats = JSON.parse(stat.toString());
-        const numOfCPUs = stats.cpu_stats.online_cpus;
-        const currentCPU = stats.cpu_stats.cpu_usage.total_usage;
-        const previousCPU = stats.precpu_stats.cpu_usage.total_usage;
-        const currentSystemCPU = stats.cpu_stats.system_cpu_usage;
-        const previousSystemCPU = stats.precpu_stats.system_cpu_usage;
-        this.insertCpuPercentage(
-          numOfCPUs,
-          currentCPU,
-          previousCPU,
-          currentSystemCPU,
-          previousSystemCPU
-        );
-        const memoryUsage = stats.memory_stats.usage;
-        const maxMemoryUsage = stats.memory_stats.limit;
-        this.insertMemPercentage(memoryUsage, maxMemoryUsage);
-      });
-    });
+    this.dockercontainer
+      .stats({ stream: false })
+      .then((stats) => {
+        stats.on("data", (stat) => {
+          const stats = JSON.parse(stat.toString());
+          const numOfCPUs = stats.cpu_stats.online_cpus;
+          const currentCPU = stats.cpu_stats.cpu_usage.total_usage;
+          const previousCPU = stats.precpu_stats.cpu_usage.total_usage;
+          const currentSystemCPU = stats.cpu_stats.system_cpu_usage;
+          const previousSystemCPU = stats.precpu_stats.system_cpu_usage;
+          this.insertCpuPercentage(
+            numOfCPUs,
+            currentCPU,
+            previousCPU,
+            currentSystemCPU,
+            previousSystemCPU
+          );
+          const memoryUsage = stats.memory_stats.usage;
+          const maxMemoryUsage = stats.memory_stats.limit;
+          this.insertMemPercentage(memoryUsage, maxMemoryUsage);
+        });
+      })
+      .catch((e) => {});
   }
 
   insertCpuPercentage(
@@ -83,8 +86,13 @@ function sleep(ms) {
   });
 }
 
+let shutdownHandlerHasRunBefore = false;
 process.on("SIGINT", async (code) => {
+  if (shutdownHandlerHasRunBefore) {
+    return
+  }
   console.log("\n");
+  shutdownHandlerHasRunBefore = true;
   if (containers.length !== 0) {
     for (const container of containers) {
       // Container stats
@@ -106,20 +114,19 @@ process.on("SIGINT", async (code) => {
           }'  : ${Math.round(memAverage)}%`
         );
       }
-
       // Stopping & removing container
-
       await container.dockercontainer
         .delete({ force: true })
         .then(() => {
           console.log("Cleaned up containers");
         })
-        .catch((err) =>
-          console.log(`Could not delete container ${container.name}`)
-        );
+        .catch((err) => {
+          console.log(err);
+          console.log(`Could not delete container ${container.name}`);
+        });
     }
   }
-  
+
   // Pruning volumes
   await docker.volume.prune({ force: true }).then(() => {
     console.log("Cleaned up volumes");
