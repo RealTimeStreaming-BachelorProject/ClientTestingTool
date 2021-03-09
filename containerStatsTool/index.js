@@ -11,6 +11,11 @@ class ContainerStat {
         this.name = JSON.parse(stat.toString()).name.slice(1);
       });
     });
+    this.isBeingDeleted = false;
+  }
+
+  isBeingDeleted() {
+    this.isBeingDeleted = true;
   }
 
   collectStats() {
@@ -88,48 +93,45 @@ function sleep(ms) {
 
 let shutdownHandlerHasRunBefore = false;
 process.on("SIGINT", async (code) => {
-  if (shutdownHandlerHasRunBefore) {
-    return
-  }
-  console.log("\n");
-  shutdownHandlerHasRunBefore = true;
-  if (containers.length !== 0) {
-    for (const container of containers) {
-      // Container stats
-      if (container.cpuPercentages.length !== 0) {
-        const cpuAverage =
-          container.cpuPercentages.reduce((prev, curr) => prev + curr) /
-          container.cpuPercentages.length;
-        console.log(
-          `Average CPU usage for container '${
-            container.name
-          }'     : ${Math.round(cpuAverage)}%`
-        );
-        const memAverage =
-          container.memPercentages.reduce((prev, curr) => prev + curr) /
-          container.memPercentages.length;
-        console.log(
-          `Average MEMORY usage for container '${
-            container.name
-          }'  : ${Math.round(memAverage)}%`
-        );
+  if (!shutdownHandlerHasRunBefore) {
+    shutdownHandlerHasRunBefore = true;
+    console.log("\n");
+    if (containers.length !== 0) {
+      for (const container of containers) {
+        // Container stats
+        if (container.cpuPercentages.length !== 0) {
+          const cpuAverage =
+            container.cpuPercentages.reduce((prev, curr) => prev + curr) /
+            container.cpuPercentages.length;
+          console.log(
+            `Average CPU usage for container '${
+              container.name
+            }'     : ${Math.round(cpuAverage)}%`
+          );
+          const memAverage =
+            container.memPercentages.reduce((prev, curr) => prev + curr) /
+            container.memPercentages.length;
+          console.log(
+            `Average MEMORY usage for container '${
+              container.name
+            }'  : ${Math.round(memAverage)}%`
+          );
+        }
       }
-      // Stopping & removing container
-      await container.dockercontainer
-        .delete({ force: true })
-        .then(() => {
-          console.log("Cleaned up containers");
-        })
-        .catch((err) => {
-          console.log(err);
-          console.log(`Could not delete container ${container.name}`);
-        });
     }
+    const dockerContainers = await docker.container.list();
+    // Stopping & removing containers
+    for (const dockerContainer of dockerContainers) {
+      await dockerContainer.delete({ force: true }).catch((err) => {
+        console.log(err);
+        console.log(`Could not delete container ${dockerContainer}`);
+      });
+    }
+    console.log("Cleaned up containers");
+    // Pruning volumes
+    await docker.volume.prune({ force: true }).then(() => {
+      console.log("Cleaned up volumes");
+    });
+    process.exit(code);
   }
-
-  // Pruning volumes
-  await docker.volume.prune({ force: true }).then(() => {
-    console.log("Cleaned up volumes");
-  });
-  process.exit(code);
 });
