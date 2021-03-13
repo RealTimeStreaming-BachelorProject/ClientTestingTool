@@ -6,7 +6,7 @@
   "scripts": {
     "test": "artillery run",
     "start": "node index.js",
-    "testcase_1": "artillery run ./tests/driverService/driverservice.loadtest.yml --target http://10.123.252.250:5022 --output /opt/reports/report.json && npm run report",
+    "testcase_1": "artillery run ./tests/driverService/driverservice.loadtest.yml --target http://10.123.252.250:5020 --output /opt/reports/report.json && npm run report",
     "testcase_1_local": "artillery run ./tests/driverService/driverservice.loadtest.yml --target http://localhost:5002 --output /opt/reports/report.json && npm run report",
     "testcase_2": "artillery run ./tests/driverService/driverservice.loadtest.yml --target http://10.123.252.246:5010 --output /opt/reports/report.json && npm run report",
     "testcase_2_local": "artillery run ./tests/driverService/driverservice.loadtest.yml --target http://localhost:5010 --output /opt/reports/report.json && npm run report",
