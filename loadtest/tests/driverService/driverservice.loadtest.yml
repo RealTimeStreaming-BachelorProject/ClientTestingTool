@@ -5,7 +5,7 @@ config:
   processor: "./customFunctions.js"
   phases: # 50 users every second for 30 seconds
     - duration: 30
-      arrivalRate: 50
+      arrivalRate: 500
 
 scenarios:
   - name: Client Scenario
