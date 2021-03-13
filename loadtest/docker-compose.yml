@@ -1,14 +1,75 @@
-version: '3'
+version: "3.8"
 
 services:
-  # connections_test:
-  #   build: .
-  #   # command: "./tests/driverService/driverservice.loadtest.yml" "--target http://10.123.252.250:5002"
-  # driver_service:
-  #   build:
-  #     context: .
-  #   # command: ["./tests/driverService/driverservice.loadtest.yml", "--target http://10.123.252.250:5002"]
-  test_runner:
-    build: .
-    volumes: 
-      - /opt/reports:/opt/reports
+  packageservice1:
+    image: omvk97/packageservice
+    container_name: packageservice1
+    env_file:
+      - .env
+    ports:
+      - 9001:9001
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 1G
+  packageservice2:
+    image: omvk97/packageservice
+    container_name: packageservice2
+    env_file:
+      - .env
+    ports:
+      - 9002:9001
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 1G
+  packageservice3:
+    image: omvk97/packageservice
+    container_name: packageservice3
+    env_file:
+      - .env
+    ports:
+      - 9003:9001
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 1G
+  packageservice4:
+    image: omvk97/packageservice
+    container_name: packageservice4
+    env_file:
+      - .env
+    ports:
+      - 9004:9001
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 1G
+  packageservice5:
+    image: omvk97/packageservice
+    container_name: packageservice5
+    env_file:
+      - .env
+    ports:
+      - 9005:9001
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 1G
+  packageservice6:
+    image: omvk97/packageservice
+    container_name: packageservice6
+    env_file:
+      - .env
+    ports:
+      - 9006:9001
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 1G
