@@ -1,4 +1,5 @@
 const { Docker } = require("node-docker-api");
+var asciichart = require("asciichart");
 
 const docker = new Docker({ socketPath: "/var/run/docker.sock" });
 class ContainerStat {
@@ -108,6 +109,14 @@ process.on("SIGINT", async (code) => {
               container.name
             }'     : ${Math.round(cpuAverage)}%`
           );
+
+          console.log(
+            asciichart.plot(container.cpuPercentages, {
+              height: 10,
+              colors: [asciichart.lightcyan],
+            })
+          );
+
           const memAverage =
             container.memPercentages.reduce((prev, curr) => prev + curr) /
             container.memPercentages.length;
@@ -115,6 +124,13 @@ process.on("SIGINT", async (code) => {
             `Average MEMORY usage for container '${
               container.name
             }'  : ${Math.round(memAverage)}%`
+          );
+
+          console.log(
+            asciichart.plot(container.memPercentages, {
+              height: 10,
+              colors: [asciichart.lightcyan],
+            })
           );
         }
       }
