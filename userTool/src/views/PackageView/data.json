@@ -1,0 +1,23 @@
+{
+  "expectedDelivery": "2021-03-18T12:26:58.824Z",
+  "receiverAddress": "Sdr. Boulevard 78 ST TV, 5000 Odense C",
+  "receiverName": "Nicolai Gram",
+  "receiverEmail": "nrasm11@student.sdu.dk",
+  "senderAddress": "Gørtlervej 11, 5230 Odense M",
+  "senderName": "Elgiganten",
+  "weightKg": 9.7,
+  "history": [
+    {
+      "text": "Shipping info received",
+      "timeStamp": "2021-03-18T12:26:58.824Z"
+    },
+    {
+      "text": "Package picked up",
+      "timeStamp": "2021-03-18T12:26:58.824Z"
+    },
+    {
+      "text": "Package in transit",
+      "timeStamp": "2021-03-18T12:26:58.824Z"
+    }
+  ]
+}

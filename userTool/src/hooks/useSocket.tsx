@@ -6,7 +6,7 @@ const ENDPOINT_LOADBALANCER = "http://localhost:5002/clients";
 
 export const useSocket = (): SocketIOClient.Socket | null => {
   const [socket, setSocket] = useState<SocketIOClient.Socket | null>(null);
-  const DRIVER_SERVICE_ENDPOINT = "ws://localhost:5002/clients"; // CHANGE THIS BACK TO ENDPOINT_LOADBALANCER if not in dev mode
+  const DRIVER_SERVICE_ENDPOINT = "http://localhost:5010/clients"; // CHANGE THIS BACK TO ENDPOINT_LOADBALANCER if not in dev mode
 
   useEffect(() => {
     if (socket) return;
