@@ -3,18 +3,44 @@ config:
   processor: "./customFunctions.js"
   tls:
     rejectUnauthorized: false
-  http:
-    # Responses have to be sent within 10 seconds or the request will be aborted
-    timeout: 10
   phases:
+    - duration: 30 # warmup phase (establishing connection, lazy loading, optimizations etc.)
+      arrivalRate: 10
+      rampTo: 200
+      name: "Warmup"
     - duration: 30
-      arrivalRate: 500
+      arrivalRate: 200
 
 scenarios:
-  - flow:
-    - function: "generateRandomUsername"
-    - post:
-        url: "/authentication/register"
-        json:
-          username: "{{ username }}"
-          password: "FakePassword1."
+  - name: Register
+    weight: 1
+    flow:
+      - function: "generateRandomUsername"
+      - post:
+          url: "/authentication/register"
+          json:
+            username: "{{ username }}"
+            password: "{{ password }}"
+          afterResponse: "saveUser"
+  - name: UpdatePassword
+    weight: 1
+    flow:
+      - function: "getRegisteredUserDetails"
+      - post:
+          url: "/authentication/update"
+          json:
+            username: "{{ username }}"
+            oldPassword: "{{ oldPassword }}"
+            newPassword: "{{ newPassword }}"
+          afterResponse: "openLockOnUserUpdate"
+
+  - name: Login
+    weight: 5
+    flow:
+      - function: "getUserDetails"
+      - post:
+          url: "/authentication/login"
+          json:
+            username: "{{ username }}"
+            password: "{{ password }}"
+      
