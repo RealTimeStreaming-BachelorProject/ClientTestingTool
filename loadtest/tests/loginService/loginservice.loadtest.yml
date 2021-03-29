@@ -5,7 +5,7 @@ config:
     rejectUnauthorized: false
   phases:
     - duration: 30 # warmup phase (establishing connection, lazy loading, optimizations etc.)
-      arrivalRate: 10
+      arrivalRate: 1
       rampTo: 200
       name: "Warmup"
     - duration: 30
