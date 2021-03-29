@@ -26,13 +26,11 @@ scenarios:
     weight: 1
     flow:
       - function: "getRegisteredUserDetails"
-      - post:
-          url: "/authentication/update"
+      - patch:
+          url: "/authentication"
           json:
             username: "{{ username }}"
-            oldPassword: "{{ oldPassword }}"
             newPassword: "{{ newPassword }}"
-          afterResponse: "openLockOnUserUpdate"
 
   - name: Login
     weight: 5

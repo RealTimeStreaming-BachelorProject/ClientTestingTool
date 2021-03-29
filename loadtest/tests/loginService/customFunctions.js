@@ -1,7 +1,6 @@
 module.exports = {
   generateRandomUsername,
   getRegisteredUserDetails,
-  openLockOnUserUpdate,
   saveUser,
   getUserDetails
 };
@@ -38,9 +37,7 @@ async function getUserDetails(userContext, events, done) {
       await new Promise((resolve) => setTimeout(resolve, 1000));
       continue;
     }
-    while (user.isChangingPassword) {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    }
+    
     userContext.vars.username = registeredUsers[randomIndex].username;
     userContext.vars.password = registeredUsers[randomIndex].password;
 
@@ -58,18 +55,10 @@ async function getRegisteredUserDetails(userContext, events, done) {
       await new Promise((resolve) => setTimeout(resolve, 1000));
       continue;
     }
-    while (user.isChangingPassword) {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    }
 
     userContext.vars.username = registeredUsers[randomIndex].username;
-    var newPassword = registeredUsers[randomIndex].password + generateRandomString(4);
-    userContext.vars.oldPassword = registeredUsers[randomIndex].password;
-    userContext.vars.newPassword = newPassword;
+    userContext.vars.newPassword = generateRandomString(4);
 
-    userContext.vars.index = randomIndex;
-    registeredUsers[randomIndex].isChangingPassword = true;
-    registeredUsers[randomIndex].password = newPassword;
     return done();
   }
 }
@@ -78,12 +67,6 @@ function saveUser(requestParams, response, context, ee, next) {
   registeredUsers.push({
     username: context.vars.username,
     password: "FakePassword1.",
-    isChangingPassword: false,
   });
-  next();
-}
-
-function openLockOnUserUpdate(requestParams, response, context, ee, next) {
-  registeredUsers[context.vars.index].isChangingPassword = false;
   next();
 }
