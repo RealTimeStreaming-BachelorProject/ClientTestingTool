@@ -1,0 +1,11 @@
+config:
+  target: "http://localhost:5010"
+  phases: # 50 users every second for 30 seconds
+    - duration: 30
+      arrivalRate: 1000
+
+scenarios:
+  - name: Client Scenario
+    flow:
+      - get:
+          url: "/"
